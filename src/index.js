@@ -26,7 +26,6 @@ class Board extends React.Component {
   render() {
     return (
       <div>
-        <div className="status">{status}</div>
         <div className="board-row">
           {this.renderSquare(0)}
           {this.renderSquare(1)}
@@ -54,6 +53,7 @@ class Game extends React.Component {
       history: [{
         squares: Array(9).fill(null)
       }],
+      stepNumber: 0,
       xIsNext: true
     }
   }
@@ -74,6 +74,13 @@ class Game extends React.Component {
     })
   }
 
+  jumpTo(step) {
+    this.setState({
+      stepNumber: step,
+      xIsNext: (step % 2) === 0
+    })
+  }
+
   render() {
     const history = this.state.history
     const current = history[history.length - 1]
@@ -82,7 +89,7 @@ class Game extends React.Component {
     const moves = history.map((step, move) => {
       const desc = move ? `Go to move # ${move}` : `Go to game start`
       return (
-        <li>
+        <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
         </li>
       )
